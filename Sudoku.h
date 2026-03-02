@@ -5,7 +5,16 @@
 typedef struct Sudoku_{
     uint8_t puzzle[9][9];
 } Sudoku;
-void print_sudoku(Sudoku*, int);
-int read_sudoku(Sudoku*);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void print_sudoku(Sudoku *ptr, int with_grid);
+int read_sudoku(Sudoku *ptr);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
