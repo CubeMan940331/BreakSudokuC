@@ -1,8 +1,5 @@
 #include"sudoku_solver.h"
-#include<stdio.h>
-#include<stdlib.h>
 #include<string.h>
-#include<assert.h>
 
 #define bitset_size(n) ((n)/(sizeof(int)*8)+((n)%(sizeof(int)*8)!=0))
 #define note_idx(i,j,n) (81*((n)-1)+(i)*9+(j))
@@ -24,16 +21,19 @@ typedef struct solver_state_{
 // bitset functions
 
 int bitset_get(int *data, int idx){
-    div_t tmp=div(idx, sizeof(int)*8);
-    return (data[tmp.quot]&(1<<tmp.rem))!=0;
+    int q=idx/(sizeof(int)*8);
+    int r=idx%(sizeof(int)*8);
+    return (data[q]&(1<<r))!=0;
 }
 void bitset_set(int *data, int idx){
-    div_t tmp=div(idx, sizeof(int)*8);
-    data[tmp.quot] |= (1<<tmp.rem);
+    int q=idx/(sizeof(int)*8);
+    int r=idx%(sizeof(int)*8);
+    data[q] |= (1<<r);
 }
 void bitset_unset(int *data, int idx){
-    div_t tmp=div(idx, sizeof(int)*8);
-    data[tmp.quot] &= ~(1<<tmp.rem);
+    int q=idx/(sizeof(int)*8);
+    int r=idx%(sizeof(int)*8);
+    data[q] &= ~(1<<r);
 }
 
 // ================================================================
@@ -257,7 +257,6 @@ int solver_state_update_n(solver_state *ptr){
     return isc;
 }
 int solver_state_is_legal(solver_state *ptr){
-    assert(ptr->sudoku_p);
     for(int i=0;i<9;++i){
         for(int j=0;j<9;++j){
             // if no possible number in empty grid
@@ -281,7 +280,6 @@ void solver_state_inference(solver_state *ptr){
 // load Sudoku and sanity check on sudoku_p
 // must call `solver_state_init` on `solver_state` first
 int solver_state_load(solver_state *ptr, Sudoku *sudoku_p){
-    assert(sudoku_p);
     for(int i=0;i<9;++i){
         for(int j=0;j<9;++j){
             if(sudoku_p->puzzle[i][j]==0) continue;
