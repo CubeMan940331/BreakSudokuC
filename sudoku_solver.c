@@ -331,12 +331,11 @@ int sudoku_solver_dfs(sudoku_solver *ptr, Sudoku *node){
                     guess|= (1<<n);
                 }
             }
-            if(guess) break;
+            if(guess) goto recurse;
         }
-        if(guess) break;
     }
     if(guess==0) return 0;
-    // recurse
+    recurse:
     for(int n=1;n<=9;++n){
         if((guess&(1<<n))==0) continue;
         Sudoku next;
